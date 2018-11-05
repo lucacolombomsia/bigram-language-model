@@ -1,0 +1,4 @@
+.DS_Store
+/OLD
+*.ipynb
+*.pyc
