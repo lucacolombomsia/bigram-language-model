@@ -1,4 +1,5 @@
 .DS_Store
 /OLD
 *.ipynb
+*.out
 *.pyc
