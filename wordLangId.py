@@ -40,8 +40,8 @@ def unigram_word_dict(sentence_list):
     return word_unigrams_dict
 
 
-def score_words(sentence, uniletter, biletter):
-    V = len(uniletter)
+def score_words(sentence, uniword, biword):
+    V = len(uniword)
     score = 0
     words = sentence.split()
     for i in range(0, len(words)+1):
@@ -49,12 +49,12 @@ def score_words(sentence, uniletter, biletter):
         unigram_key = bigram_key.split(' ')[0]
         
         try:
-            numerator = (biletter[bigram_key] + 1)
+            numerator = (biword[bigram_key] + 1)
         except KeyError:
             numerator = 1
         
         try:
-            denominator = uniletter[unigram_key] + V
+            denominator = uniword[unigram_key] + V
         except KeyError:
             denominator = V
             
