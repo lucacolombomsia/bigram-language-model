@@ -3,10 +3,13 @@ import string
 import operator
 
 def read_files(path):
+    #function to read the training files and test file
+    #the chosen encoding has proven to be optimal given the input data
     with open(path, 'rb',) as file:
         data = file.read().decode('utf8', 'surrogateescape')
         data = data.splitlines()
-        #want to remove punctuation, make lowercase and remove double spaces
+        #text_preprocess() removes punctuation, makes text all lowercase and
+        #removes double/leading/trailing spaces
         data = text_preprocess(data)
     #make sure we drop empty lines
     data = list(filter(None, data))
@@ -14,7 +17,10 @@ def read_files(path):
 
 
 def text_preprocess(text_list):
+    #input is a list of strings
+    #output will be a list of clean strings
     output = []
+    #compile a regex with all punctuation marks
     regex = re.compile('[%s]' % re.escape(string.punctuation))
     for one_string in text_list:
         #remove punctuation
@@ -35,9 +41,12 @@ def write_out(output_file, output_list):
 
 
 def compute_performance(output_list, ground_truth):
+    #function to check percentage accuracy of a specific language model
+    #compares output list from a language model with ground truth
     N = len(output_list)
+    #count variable will store number of correctly classified sentences
     count = 0
     for i in range(N):
         if output_list[i] == ground_truth[i]:
             count += 1
-    return count
+    return round(count/N*100, 1)

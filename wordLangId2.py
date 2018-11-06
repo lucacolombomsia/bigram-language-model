@@ -159,6 +159,9 @@ def main():
 
     write_out('wordLangId2.out', output_word_gt)
 
+    perf = compute_performance(output_word_gt, sol)
+    print('Accuracy of word bigram model with Good-Turing smoothing: {}%'.format(perf))
+
 
 if __name__ == "__main__":
     main()

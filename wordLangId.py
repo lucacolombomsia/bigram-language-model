@@ -101,5 +101,8 @@ def main():
 
     write_out('wordLangId.out', output_word)
 
+    perf = compute_performance(output_word, sol)
+    print('Accuracy of word bigram model with add-one smoothing: {}%'.format(perf))
+
 if __name__ == "__main__":
     main()
