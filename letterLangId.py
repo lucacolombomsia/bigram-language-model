@@ -3,8 +3,8 @@ import numpy as np
 import operator
 
 def make_letter_key(one_word, i):
-    #this function, if called while iterating through the letters of a word,
-    #returns the letter bigram
+    #this function should be called while iterating through the letters of a word
+    #it returns the letter bigram
     #special characters <b> and <e> are used to identify beginning and
     #end of word respectively
     #two letters in bigram are separated by comma
@@ -21,7 +21,7 @@ def make_letter_key(one_word, i):
 
 
 def bigram_letter_dict(sentence_list):
-    #function to obtain count of all letter bigrams in the train data
+    #function to obtain count of each letter bigram in the train corpus
     #input is a list of strings
     #for each sentence in that list, we need to turn it in a list of words
     #then, each word in that list is traversed to obtain letter bigrams
@@ -42,7 +42,7 @@ def bigram_letter_dict(sentence_list):
 
 
 def unigram_letter_dict(sentence_list):
-    #function to obtain count of all letter unigrams in the train data
+    #function to obtain count of each letter unigram in the train corpus
     #input is a list of strings
     #for each sentence in that list, we need to turn it in a list of words
     #then, each word in that list is traversed to obtain letter unigrams
@@ -64,12 +64,12 @@ def unigram_letter_dict(sentence_list):
 
 
 def score_letters(sentence, uniletter, biletter):
-    #this function takes a sentence, a python dict with count of unigrams in train
-    #and a python dict with count of bigrams in train and return the add-one smoothed
-    #probability that the provided sentence is in the language of the two dictionaries
     #this is the function that performs the language model scoring for letter bigrams
+    #it takes a sentence, a python dict with count of unigrams in train
+    #and a python dict with count of bigrams in train and returns the add-one smoothed
+    #probability that the provided sentence is in the language of the two dictionaries
     #note that smoothing is done on the fly for counts and smoothed counts are
-    #then turned into probabilities on the fly
+    #then turned into probabilities on the fly using MLE
 
     #V is the size of the vocabulary, ie the count of distinct unigrams
     V = len(uniletter)
@@ -83,9 +83,10 @@ def score_letters(sentence, uniletter, biletter):
             bigram_key = make_letter_key(one_word, i)
             unigram_key = bigram_key.split(',')[0]
             
-            #this is how we deal with unknowns
+            #here we perform the add-one smoothing of the counts
+            #note how we deal with unknowns
             #an unknown is a unigram/bigram that was never seen in training
-            #an unknown is therefore NOT one of the keys in the python dict with the
+            #an unknown is therefore NOT a key in the python dict with the
             #counts of unigrams/bigrams in training
             #python raises a KeyError when asked to go in a dict and return value
             #associated to non-existing key; exploit this to deal with unknowns
@@ -98,7 +99,8 @@ def score_letters(sentence, uniletter, biletter):
                 denominator = uniletter[unigram_key] + V
             except KeyError:
                 denominator = V
-                
+            
+            #turn counts into conditional probability using MLE    
             proba = np.log(numerator/denominator)
             score += proba
     return score
@@ -112,6 +114,7 @@ def make_output_letter(test,
     #and returns a list with the predicted language for each sentence in the test set
     #for each sentence, model is scored using the ENG, ITA and FRA dictionaries
     #then, the predicted language is simply the one associated to the highest probability
+    #the predicted language is the language that is associated to the highest proba
     output = []
     for i in range(len(test)):
         test_line = test[i]
